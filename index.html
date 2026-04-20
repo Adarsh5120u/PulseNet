@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PulseNet Agent</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="PulseNet home">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32" role="img">
+              <path d="M16 3c7 0 13 5.6 13 12.7 0 8.2-8.9 12.7-12.1 13.6a3 3 0 0 1-1.8 0C11.9 28.4 3 23.9 3 15.7 3 8.6 9 3 16 3Z" fill="currentColor" opacity=".18" />
+              <path d="M8 17h4l2-6 4 11 2-5h4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </span>
+          <span>
+            <strong>PulseNet</strong>
+            <small>health data sharing agent</small>
+          </span>
+        </a>
+        <nav class="top-actions" aria-label="Primary">
+          <button class="icon-button" type="button" data-action="toggle-theme" title="Toggle theme" aria-label="Toggle theme">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v2m0 14v2M5.6 5.6 7 7m10 10 1.4 1.4M3 12h2m14 0h2M5.6 18.4 7 17m10-10 1.4-1.4" /><circle cx="12" cy="12" r="4" /></svg>
+          </button>
+          <button class="ghost-button" type="button" data-action="reset-demo">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7v5h5" /><path d="M20 17a8 8 0 0 1-13.7-5.6L4 12" /><path d="M20 7a8 8 0 0 0-12.5-2" /></svg>
+            Reset demo
+          </button>
+        </nav>
+      </header>
+
+      <main class="workspace">
+        <section class="scan-panel" aria-labelledby="scan-title">
+          <div class="panel-heading">
+            <p class="eyebrow">QR Health ID</p>
+            <h1 id="scan-title">Scan, verify, consent, share.</h1>
+            <p class="subcopy">A local agent demo for secure patient data exchange across hospitals using FHIR-style resources and consent-aware access.</p>
+          </div>
+
+          <div class="scanner">
+            <div class="qr-stage" aria-label="Patient QR preview">
+              <div class="scan-line"></div>
+              <div class="qr-grid" id="qr-grid"></div>
+            </div>
+            <div class="scan-controls">
+              <label for="patient-code">Health ID or QR payload</label>
+              <div class="input-row">
+                <input id="patient-code" type="text" value="PN-AARAV-0426" autocomplete="off" />
+                <button class="primary-button" type="button" data-action="scan">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7V4h3M17 4h3v3M20 17v3h-3M7 20H4v-3" /><path d="M8 8h8v8H8z" /></svg>
+                  Scan
+                </button>
+              </div>
+              <div class="quick-patients" role="list" aria-label="Demo patients">
+                <button type="button" data-patient="PN-AARAV-0426">Aarav</button>
+                <button type="button" data-patient="PN-MEERA-3110">Meera</button>
+                <button type="button" data-patient="PN-JOSEPH-8841">Joseph</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="integration-strip" aria-label="Connected hospital systems">
+            <span>FHIR R4</span>
+            <span>Consent API</span>
+            <span>JWT/OAuth</span>
+            <span>Audit trail</span>
+          </div>
+        </section>
+
+        <section class="agent-panel" aria-label="PulseNet agent workspace">
+          <div class="status-rail">
+            <article class="status-step active" data-step="identity">
+              <span>01</span>
+              <strong>Identity</strong>
+              <small>QR Health ID matched</small>
+            </article>
+            <article class="status-step" data-step="consent">
+              <span>02</span>
+              <strong>Consent</strong>
+              <small>Awaiting approval</small>
+            </article>
+            <article class="status-step" data-step="fhir">
+              <span>03</span>
+              <strong>FHIR Fetch</strong>
+              <small>Records locked</small>
+            </article>
+            <article class="status-step" data-step="insights">
+              <span>04</span>
+              <strong>AI Alerts</strong>
+              <small>Ready after fetch</small>
+            </article>
+          </div>
+
+          <div class="patient-summary" id="patient-summary"></div>
+
+          <div class="mode-switch" aria-label="Access mode">
+            <button type="button" class="selected" data-mode="normal">Consent mode</button>
+            <button type="button" data-mode="emergency">Emergency mode</button>
+          </div>
+
+          <div class="consent-box" id="consent-box"></div>
+
+          <div class="command-bar" aria-label="Agent commands">
+            <button class="primary-button" type="button" data-action="grant">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6" /></svg>
+              Grant consent
+            </button>
+            <button class="secondary-button" type="button" data-action="fetch">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12" /><path d="m7 10 5 5 5-5" /><path d="M5 21h14" /></svg>
+              Fetch records
+            </button>
+            <button class="danger-button" type="button" data-action="emergency">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v20M2 12h20" /></svg>
+              Break glass
+            </button>
+            <button class="icon-button" type="button" data-action="export" title="Copy FHIR bundle" aria-label="Copy FHIR bundle">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 8h10v12H8z" /><path d="M6 16H4V4h10v2" /></svg>
+            </button>
+          </div>
+        </section>
+      </main>
+
+      <section class="record-band" aria-label="Clinical record workspace">
+        <div class="tabs" role="tablist" aria-label="Record views">
+          <button class="active" type="button" role="tab" data-tab="timeline">Timeline</button>
+          <button type="button" role="tab" data-tab="labs">Labs</button>
+          <button type="button" role="tab" data-tab="meds">Meds</button>
+          <button type="button" role="tab" data-tab="bundle">FHIR</button>
+          <button type="button" role="tab" data-tab="audit">Audit</button>
+        </div>
+        <div class="records-grid">
+          <aside class="insight-column">
+            <h2>Agent Insights</h2>
+            <div id="insights"></div>
+          </aside>
+          <div class="record-view" id="record-view"></div>
+        </div>
+      </section>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="./app.js"></script>
+  </body>
+</html>
